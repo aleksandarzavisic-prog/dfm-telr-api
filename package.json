@@ -1,0 +1,12 @@
+{
+  "name": "dfm-telr-payment-api",
+  "version": "1.0.0",
+  "description": "De Facto Mobili - Telr Payment Link Generator",
+  "scripts": {
+    "dev": "vercel dev"
+  },
+  "dependencies": {},
+  "engines": {
+    "node": ">=18"
+  }
+}
