@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wall Deco Panel Calculator | De Facto Mobili</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #222222;
+            color: #FFF5D0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 500px; margin: 0 auto; }
+        header { text-align: center; margin-bottom: 20px; }
+        .logo { font-size: 1.8rem; font-weight: 700; }
+        .logo span { color: #F55139; }
+        .subtitle { opacity: 0.8; font-size: 0.9rem; margin-top: 5px; }
+        
+        .promo-banner {
+            background: linear-gradient(135deg, #BA3521 0%, #F55139 100%);
+            padding: 15px 20px; border-radius: 12px;
+            margin-bottom: 20px; text-align: center;
+        }
+        .promo-title { font-size: 1.1rem; font-weight: 700; }
+        .promo-subtitle { font-size: 0.85rem; opacity: 0.95; margin-top: 3px; }
+        
+        .card { 
+            background: #2a2a2a; 
+            border-radius: 20px; 
+            padding: 25px; 
+            border: 1px solid #444;
+        }
+        .form-group { margin-bottom: 20px; }
+        label { display: block; font-size: 0.85rem; font-weight: 600; margin-bottom: 8px; }
+        
+        .btn-group { display: flex; gap: 8px; }
+        .btn-group button {
+            flex: 1;
+            padding: 12px 8px;
+            border: 2px solid #444;
+            border-radius: 10px;
+            background: #333;
+            color: #FFF5D0;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .btn-group button.active {
+            border-color: #BA3521;
+            background: #BA3521;
+        }
+        
+        .input-row { display: flex; gap: 10px; align-items: center; }
+        .input-row input { flex: 1; }
+        
+        input, select {
+            width: 100%;
+            padding: 14px 16px;
+            font-size: 1rem;
+            border: 2px solid #444;
+            border-radius: 12px;
+            background: #333;
+            color: #FFF5D0;
+        }
+        input:focus, select:focus { outline: none; border-color: #BA3521; }
+        
+        .price-list-btn {
+            background: linear-gradient(135deg, #BA3521 0%, #F55139 100%);
+            color: #FFF5D0;
+            border: none;
+            border-radius: 12px;
+            padding: 14px 16px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        .info-text { font-size: 0.75rem; color: #999; margin-top: 5px; }
+        
+        .divider { height: 2px; background: #444; margin: 25px 0; }
+        
+        .result-box {
+            background: #333;
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .result-label { font-size: 0.85rem; color: #999; margin-bottom: 5px; }
+        .result-value { font-size: 1.8rem; font-weight: 700; }
+        
+        .savings-box {
+            background: linear-gradient(135deg, #2d4a3e 0%, #1e3a2f 100%);
+            border: 2px solid #38a169;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .savings-box .label { color: #68d391; font-weight: 700; margin-bottom: 8px; }
+        .savings-box .original { text-decoration: line-through; color: #888; margin-right: 10px; }
+        .savings-box .free { font-size: 1.5rem; font-weight: 700; color: #68d391; }
+        .savings-box .badge { background: #38a169; color: white; padding: 4px 10px; border-radius: 20px; font-size: 0.75rem; margin-left: 8px; }
+        .savings-box .amount { background: rgba(56,161,105,0.3); border-radius: 8px; padding: 10px; margin-top: 10px; }
+        .savings-box .amount span { color: #FFF5D0; font-size: 1.2rem; font-weight: 700; }
+        
+        .vat-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; color: #999; }
+        .vat-row label { display: flex; align-items: center; gap: 8px; cursor: pointer; }
+        .vat-row input[type="checkbox"] { width: 18px; height: 18px; }
+        
+        .total-box {
+            background: linear-gradient(135deg, #BA3521 0%, #F55139 100%);
+            border-radius: 16px;
+            padding: 25px;
+            text-align: center;
+            margin-top: 15px;
+        }
+        .total-box .label { font-size: 0.9rem; opacity: 0.9; margin-bottom: 5px; }
+        .total-box .value { font-size: 2.5rem; font-weight: 700; }
+        .total-box .savings { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 12px; margin-top: 15px; }
+        .total-box .savings .amount { color: #90EE90; font-size: 1.3rem; font-weight: 700; }
+        
+        .client-section { margin-top: 25px; }
+        .client-section input { margin-bottom: 10px; }
+        
+        .send-btn {
+            width: 100%;
+            padding: 16px;
+            margin-top: 20px;
+            background: #FFF5D0;
+            color: #222;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .send-btn:disabled { opacity: 0.7; cursor: not-allowed; }
+        
+        .link-box {
+            display: none;
+            margin-top: 20px;
+            background: linear-gradient(135deg, #1a4d3a 0%, #0d3025 100%);
+            border: 2px solid #38a169;
+            border-radius: 12px;
+            padding: 20px;
+        }
+        .link-box.active { display: block; }
+        .link-box-title { color: #68d391; font-weight: 700; font-size: 14px; margin-bottom: 15px; text-align: center; }
+        .link-display { background: #333; border-radius: 8px; padding: 12px; margin-bottom: 15px; word-break: break-all; font-size: 13px; color: #FFF5D0; }
+        .btn-row { display: flex; gap: 10px; }
+        .copy-btn {
+            flex: 1;
+            background: #38a169;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .wa-btn {
+            flex: 1;
+            background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        .link-help { font-size: 11px; color: #9ae6b4; margin-top: 12px; text-align: center; }
+        
+        footer { text-align: center; margin-top: 20px; color: #666; font-size: 0.8rem; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="logo">De Facto <span>Mobili</span></div>
+            <div class="subtitle">Wall Deco Panel Calculator</div>
+        </header>
+        
+        <div class="promo-banner">
+            <div class="promo-title">❄️ 🎄 WINTER HOLIDAY PROMOTION 🎁</div>
+            <div class="promo-subtitle">FREE Installation on all panels!</div>
+        </div>
+        
+        <div class="card">
+            <div class="form-group">
+                <label>Panel Type</label>
+                <div class="btn-group" id="panelBtns">
+                    <button type="button" class="active" data-type="Bas Relief" data-discount="0.4">Bas Relief</button>
+                    <button type="button" data-type="Printography" data-discount="0.3">Printography</button>
+                    <button type="button" data-type="3D" data-discount="0.3">3D</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Panel Price (USD/m²)</label>
+                <div class="input-row">
+                    <input type="number" id="publicRate" value="261" min="1">
+                    <a href="https://dfm-telr-api.vercel.app/public/Price_List_WallDeco.pdf" target="_blank" class="price-list-btn">📋 Price List</a>
+                </div>
+                <div class="info-text">Enter catalog price for selected panel</div>
+            </div>
+            
+            <div class="form-group">
+                <label>Installation Type</label>
+                <div class="btn-group" id="installBtns">
+                    <button type="button" class="active" data-price="850">A - Complex</button>
+                    <button type="button" data-price="750">B - Standard</button>
+                    <button type="button" data-price="550">C - Simple</button>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label>Total Area (m²)</label>
+                <input type="number" id="totalM2" value="7" min="0.1" step="0.1">
+            </div>
+            
+            <div class="form-group">
+                <label>Panel Weight (kg/m²)</label>
+                <input type="number" id="weightPerM2" value="23" min="1">
+            </div>
+            
+            <div class="form-group">
+                <label>Shipping</label>
+                <select id="shippingCoef">
+                    <option value="1">Single panel shipment</option>
+                    <option value="2" selected>Shared with 1 other</option>
+                    <option value="3">Shared with 2 others</option>
+                </select>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="result-box">
+                <div class="result-label">Material Price</div>
+                <div class="result-value" id="materialPrice">AED 0.00</div>
+                <div class="info-text" id="pricePerM2">AED 0.00 / m²</div>
+            </div>
+            
+            <div class="savings-box">
+                <div class="label">🎉 INSTALLATION</div>
+                <div>
+                    <span class="original" id="installOriginal">AED 5,950</span>
+                    <span class="free">FREE</span>
+                    <span class="badge">WINTER PROMO</span>
+                </div>
+                <div class="amount">You Save: <span id="installSavings">AED 5,950</span></div>
+            </div>
+            
+            <div class="vat-row">
+                <label><input type="checkbox" id="includeVat" checked> Include 5% VAT</label>
+                <span id="vatAmount">AED 0.00</span>
+            </div>
+            
+            <div class="total-box">
+                <div class="label">FINAL TOTAL</div>
+                <div class="value" id="finalTotal">AED 0.00</div>
+                <div class="savings">
+                    <div>🎁 Total Savings</div>
+                    <div class="amount" id="totalSavings">AED 0.00</div>
+                </div>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="client-section">
+                <label>📋 Client Details</label>
+                <input type="text" id="clientName" placeholder="Client Name">
+                <input type="email" id="clientEmail" placeholder="Client Email">
+                <input type="tel" id="clientPhone" placeholder="Client WhatsApp Number (e.g. +971501234567)">
+                <input type="tel" id="senderPhone" placeholder="Your WhatsApp Number" value="+971">
+            </div>
+            
+            <button class="send-btn" id="sendBtn">📤 GENERATE QUOTE LINK</button>
+            
+            <div class="link-box" id="linkBox">
+                <div class="link-box-title">✅ Quote Link Ready!</div>
+                <div class="link-display" id="quoteLink">https://...</div>
+                <div class="btn-row">
+                    <button class="copy-btn" id="copyBtn">📋 Copy Link</button>
+                    <a class="wa-btn" id="waShareBtn" href="#" target="_blank">📱 Send WhatsApp</a>
+                </div>
+                <div class="link-help">Send this link to your client. They can confirm and pay online!</div>
+            </div>
+        </div>
+        
+        <footer>De Facto Mobili • Winter 2025</footer>
+    </div>
+
+<script>
+var panelType = 'Bas Relief';
+var discount = 0.4;
+var installPrice = 850;
+var calculated = {};
+
+var EXPORT_CLEARANCE = 200;
+var LOCAL_TRANSPORT = 1;
+var INSURANCE_RATE = 0.004;
+var AIR_FREIGHT = 1.75;
+var AWB_BOOKING = 15;
+var IMPORT_CLEARANCE = 300;
+var CUSTOMS_DUTY = 0.05;
+var DELIVERY = 50;
+var PROFIT_MARGIN = 0.55;
+var USD_TO_AED = 3.69;
+var PER_SHIPMENT_FEES = EXPORT_CLEARANCE + AWB_BOOKING + IMPORT_CLEARANCE + DELIVERY;
+
+// Panel buttons
+var panelBtns = document.getElementById('panelBtns').getElementsByTagName('button');
+for (var i = 0; i < panelBtns.length; i++) {
+    panelBtns[i].onclick = function() {
+        for (var j = 0; j < panelBtns.length; j++) panelBtns[j].className = '';
+        this.className = 'active';
+        panelType = this.getAttribute('data-type');
+        discount = parseFloat(this.getAttribute('data-discount'));
+        calculate();
+    };
+}
+
+// Install buttons
+var installBtns = document.getElementById('installBtns').getElementsByTagName('button');
+for (var i = 0; i < installBtns.length; i++) {
+    installBtns[i].onclick = function() {
+        for (var j = 0; j < installBtns.length; j++) installBtns[j].className = '';
+        this.className = 'active';
+        installPrice = parseFloat(this.getAttribute('data-price'));
+        calculate();
+    };
+}
+
+// Input listeners
+document.getElementById('publicRate').oninput = calculate;
+document.getElementById('totalM2').oninput = calculate;
+document.getElementById('weightPerM2').oninput = calculate;
+document.getElementById('shippingCoef').onchange = calculate;
+document.getElementById('includeVat').onchange = calculate;
+
+function calculate() {
+    var publicRate = parseFloat(document.getElementById('publicRate').value) || 0;
+    var totalM2 = parseFloat(document.getElementById('totalM2').value) || 0;
+    var weightPerM2 = parseFloat(document.getElementById('weightPerM2').value) || 0;
+    var shippingCoef = parseInt(document.getElementById('shippingCoef').value) || 1;
+    var includeVat = document.getElementById('includeVat').checked;
+    
+    var purchasePriceUSD = publicRate * (1 - discount) * totalM2;
+    var totalWeight = totalM2 * weightPerM2;
+    var shippingFeesUSD = PER_SHIPMENT_FEES / shippingCoef;
+    var shippingCostUSD = totalWeight * (LOCAL_TRANSPORT + AIR_FREIGHT);
+    var insuranceDutyUSD = purchasePriceUSD * (INSURANCE_RATE + CUSTOMS_DUTY);
+    var totalCostUSD = purchasePriceUSD + shippingFeesUSD + shippingCostUSD + insuranceDutyUSD;
+    var totalCostAED = totalCostUSD * USD_TO_AED;
+    var costPerM2AED = totalM2 > 0 ? totalCostAED / totalM2 : 0;
+    var marginAED = costPerM2AED * PROFIT_MARGIN;
+    var materialPriceM2AED = costPerM2AED + marginAED;
+    var materialPriceAED = materialPriceM2AED * totalM2;
+    var installationSavings = installPrice * totalM2;
+    var vatAmountAED = includeVat ? materialPriceAED * 0.05 : 0;
+    var finalTotalAED = materialPriceAED + vatAmountAED;
+
+    document.getElementById('materialPrice').textContent = formatAED(materialPriceAED);
+    document.getElementById('pricePerM2').textContent = formatAED(materialPriceM2AED) + ' / m²';
+    document.getElementById('installOriginal').textContent = formatAED(installationSavings);
+    document.getElementById('installSavings').textContent = formatAED(installationSavings);
+    document.getElementById('vatAmount').textContent = includeVat ? formatAED(vatAmountAED) : 'AED 0.00';
+    document.getElementById('finalTotal').textContent = formatAED(finalTotalAED);
+    document.getElementById('totalSavings').textContent = formatAED(installationSavings);
+
+    calculated = {
+        materialPriceAED: materialPriceAED,
+        materialPriceM2AED: materialPriceM2AED,
+        installationSavings: installationSavings,
+        vatAmountAED: vatAmountAED,
+        finalTotalAED: finalTotalAED
+    };
+}
+
+function formatAED(amount) {
+    return 'AED ' + amount.toFixed(2).replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// Generate quote link
+document.getElementById('sendBtn').onclick = function() {
+    var btn = this;
+    var clientName = document.getElementById('clientName').value || 'Valued Customer';
+    var clientEmail = document.getElementById('clientEmail').value || '';
+    var clientPhone = document.getElementById('clientPhone').value || '';
+    var senderPhone = document.getElementById('senderPhone').value.replace(/[^0-9]/g, '');
+    var today = new Date().toLocaleDateString('en-GB');
+    var quoteRef = 'DFM-' + Date.now().toString().slice(-6);
+    var includeVat = document.getElementById('includeVat').checked;
+    var totalM2 = document.getElementById('totalM2').value;
+    
+    btn.textContent = '⏳ Generating...';
+    btn.disabled = true;
+    
+    // First get payment link from Telr
+    fetch('https://dfm-telr-api.vercel.app/api/create-payment', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+            amount: calculated.finalTotalAED.toFixed(2),
+            description: panelType + ' Wall Deco Panel - ' + totalM2 + ' m²',
+            clientName: clientName,
+            clientEmail: clientEmail || 'customer@email.com',
+            clientPhone: clientPhone,
+            quoteRef: quoteRef
+        })
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(paymentData) {
+        var paymentUrl = paymentData.success ? paymentData.paymentUrl : '';
+        
+        // Now save quote
+        var quoteData = {
+            ref: quoteRef,
+            date: today,
+            clientName: clientName,
+            clientEmail: clientEmail,
+            clientPhone: clientPhone,
+            senderPhone: senderPhone,
+            panelType: panelType,
+            area: totalM2,
+            priceM2: formatAED(calculated.materialPriceM2AED),
+            material: formatAED(calculated.materialPriceAED),
+            installOrig: formatAED(calculated.installationSavings),
+            installSave: formatAED(calculated.installationSavings),
+            vat: includeVat ? formatAED(calculated.vatAmountAED) : 'AED 0.00',
+            total: formatAED(calculated.finalTotalAED),
+            paymentUrl: paymentUrl
+        };
+        
+        return fetch('https://dfm-telr-api.vercel.app/api/save-quote', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(quoteData)
+        });
+    })
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+        btn.textContent = '📤 GENERATE QUOTE LINK';
+        btn.disabled = false;
+        
+        if (data.success) {
+            showQuoteLink(data.quoteUrl, clientName, clientPhone);
+        } else {
+            alert('Error generating quote: ' + (data.error || 'Unknown error'));
+        }
+    })
+    .catch(function(e) {
+        btn.textContent = '📤 GENERATE QUOTE LINK';
+        btn.disabled = false;
+        alert('Error: ' + e.message);
+    });
+};
+
+function showQuoteLink(quoteUrl, clientName, clientPhone) {
+    document.getElementById('quoteLink').textContent = quoteUrl;
+    document.getElementById('linkBox').classList.add('active');
+    
+    // Setup WhatsApp share
+    var clientPhoneClean = clientPhone.replace(/[^0-9]/g, '');
+    var waMsg = encodeURIComponent('Hello ' + clientName + '!\n\nHere is your Wall Deco Panel quotation from De Facto Mobili:\n\n' + quoteUrl + '\n\nPlease review and confirm your order. Thank you! 🎄');
+    document.getElementById('waShareBtn').href = 'https://wa.me/' + clientPhoneClean + '?text=' + waMsg;
+    
+    // Scroll to link box
+    document.getElementById('linkBox').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Copy button
+document.getElementById('copyBtn').onclick = function() {
+    var linkText = document.getElementById('quoteLink').textContent;
+    
+    if (navigator.clipboard) {
+        navigator.clipboard.writeText(linkText);
+    } else {
+        var textarea = document.createElement('textarea');
+        textarea.value = linkText;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
+    
+    this.textContent = '✅ Copied!';
+    var btn = this;
+    setTimeout(function() { btn.textContent = '📋 Copy Link'; }, 2000);
+};
+
+// Initialize
+calculate();
+</script>
+</body>
+</html>

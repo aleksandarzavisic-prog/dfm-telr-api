@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quote - De Facto Mobili</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #222;
+            color: #FFF5D0;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container { max-width: 600px; margin: 0 auto; }
+        
+        .loading { text-align: center; padding: 50px; }
+        .loading-spinner { font-size: 40px; animation: spin 1s linear infinite; display: inline-block; }
+        @keyframes spin { 100% { transform: rotate(360deg); } }
+        
+        .error-box { background: #c53030; padding: 20px; border-radius: 10px; text-align: center; }
+        
+        .quote-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 20px; border-bottom: 3px solid #BA3521; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
+        .company-name { font-size: 28px; font-weight: 700; }
+        .company-tagline { font-size: 11px; color: #999; letter-spacing: 2px; text-transform: uppercase; }
+        .quote-info { text-align: right; }
+        .quote-title { font-size: 24px; font-weight: 700; color: #F55139; }
+        .quote-ref { font-size: 13px; color: #F55139; }
+        .quote-date { font-size: 12px; color: #999; }
+        
+        .client-box { background: #333; border-left: 4px solid #BA3521; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
+        .client-label { font-size: 10px; color: #999; text-transform: uppercase; margin-bottom: 5px; }
+        .client-name { font-size: 20px; font-weight: 700; }
+        .client-phone { font-size: 13px; color: #999; margin-top: 5px; }
+        
+        .promo-bar { background: linear-gradient(135deg, #BA3521, #F55139); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-weight: 700; font-size: 14px; }
+        
+        .section-title { font-size: 15px; font-weight: 700; color: #F55139; border-bottom: 2px solid #BA3521; padding-bottom: 8px; margin-bottom: 15px; }
+        
+        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #444; font-size: 14px; }
+        
+        .material-box { background: #333; border-left: 4px solid #F55139; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; }
+        .material-label { font-size: 12px; color: #999; }
+        .material-value { font-size: 26px; font-weight: 700; }
+        
+        .install-box { background: linear-gradient(135deg, #1a4d3a, #0d3025); border: 3px solid #38a169; border-radius: 10px; padding: 20px; text-align: center; margin: 15px 0; }
+        .install-label { font-size: 13px; color: #68d391; font-weight: 700; margin-bottom: 10px; }
+        .install-row { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .install-original { font-size: 18px; color: #888; text-decoration: line-through; }
+        .install-free { font-size: 28px; font-weight: 700; color: #68d391; }
+        .install-badge { background: #38a169; color: white; padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: 700; }
+        .install-savings { background: rgba(56,161,105,0.3); border-radius: 6px; padding: 10px; margin-top: 12px; }
+        .install-savings-label { font-size: 12px; color: #9ae6b4; }
+        .install-savings-value { font-size: 20px; font-weight: 700; color: #FFF5D0; }
+        
+        .vat-display { display: flex; justify-content: space-between; padding: 10px 0; color: #999; border-bottom: 1px solid #444; font-size: 14px; }
+        
+        .total-display { background: linear-gradient(135deg, #BA3521, #F55139); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        .total-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
+        .total-label { font-size: 14px; }
+        .total-value { font-size: 32px; font-weight: 700; }
+        .total-savings-box { background: rgba(255,255,255,0.15); border-radius: 6px; padding: 12px; margin-top: 12px; text-align: center; }
+        .total-savings-label { font-size: 12px; opacity: 0.9; }
+        .total-savings-value { font-size: 20px; font-weight: 700; color: #90EE90; }
+        
+        .quote-footer { border-top: 3px solid #BA3521; padding-top: 15px; margin-top: 20px; text-align: center; color: #999; font-size: 11px; }
+        .quote-footer-brand { font-size: 14px; font-weight: 700; color: #FFF5D0; margin: 5px 0; }
+        
+        .action-box { background: #333; border-radius: 12px; padding: 20px; margin-top: 25px; text-align: center; }
+        .action-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
+        .btn { display: block; width: 100%; padding: 18px; border-radius: 10px; font-size: 18px; font-weight: 700; text-decoration: none; text-align: center; border: none; cursor: pointer; margin-bottom: 10px; }
+        .btn-confirm { background: linear-gradient(135deg, #25D366, #128C7E); color: white; }
+        .btn-pay { background: linear-gradient(135deg, #d69e2e, #b7791f); color: white; }
+        .btn-print { background: linear-gradient(135deg, #666, #444); color: #FFF5D0; font-size: 14px; padding: 12px; }
+        .btn-help { font-size: 11px; color: #999; margin-top: 5px; margin-bottom: 15px; }
+        
+        .confirmed-box { background: #1a4d3a; border: 2px solid #38a169; border-radius: 10px; padding: 15px; margin-bottom: 15px; text-align: center; }
+        .confirmed-text { color: #68d391; font-size: 16px; font-weight: 600; }
+        
+        @media print {
+            .no-print { display: none !important; }
+            body { background: #222 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+        }
+        
+        @media (max-width: 500px) {
+            .quote-header { flex-direction: column; }
+            .quote-info { text-align: left; }
+            .total-value { font-size: 26px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Loading State -->
+        <div class="loading" id="loadingState">
+            <div class="loading-spinner">⏳</div>
+            <p style="margin-top: 15px;">Loading your quote...</p>
+        </div>
+        
+        <!-- Error State -->
+        <div class="error-box" id="errorState" style="display: none;">
+            <h2>😕 Quote Not Found</h2>
+            <p style="margin-top: 10px;">This quote may have expired or the link is invalid.</p>
+            <p style="margin-top: 10px; font-size: 12px;">Please contact De Facto Mobili for assistance.</p>
+        </div>
+        
+        <!-- Quote Content -->
+        <div id="quoteContent" style="display: none;">
+            <div class="quote-header">
+                <div>
+                    <div class="company-name">De Facto Mobili</div>
+                    <div class="company-tagline">furniture and decoration</div>
+                </div>
+                <div class="quote-info">
+                    <div class="quote-title">QUOTATION</div>
+                    <div class="quote-ref" id="qRef">Ref: DFM-000000</div>
+                    <div class="quote-date" id="qDate">00/00/0000 • Valid 7 days</div>
+                </div>
+            </div>
+            
+            <div class="client-box">
+                <div class="client-label">Prepared For</div>
+                <div class="client-name" id="qClientName">Client Name</div>
+                <div class="client-phone" id="qClientPhone">📱 0000000000</div>
+            </div>
+            
+            <div class="promo-bar">❄️ WINTER HOLIDAY - FREE INSTALLATION! 🎁</div>
+            
+            <div class="section-title">Wall Deco Panel Details</div>
+            <div class="detail-row"><span>Panel Type</span><span id="qPanelType">Bas Relief</span></div>
+            <div class="detail-row"><span>Total Area</span><span id="qArea">7 m²</span></div>
+            <div class="detail-row"><span>Price per m²</span><span id="qPriceM2">AED 0.00</span></div>
+            
+            <div class="material-box">
+                <div class="material-label">Material Price</div>
+                <div class="material-value" id="qMaterial">AED 0.00</div>
+            </div>
+            
+            <div class="install-box">
+                <div class="install-label">🎉 INSTALLATION</div>
+                <div class="install-row">
+                    <span class="install-original" id="qInstallOrig">AED 5,950.00</span>
+                    <span class="install-free">FREE</span>
+                    <span class="install-badge">WINTER PROMO</span>
+                </div>
+                <div class="install-savings">
+                    <div class="install-savings-label">You Save</div>
+                    <div class="install-savings-value" id="qInstallSave">AED 5,950.00</div>
+                </div>
+            </div>
+            
+            <div class="vat-display" id="qVatRow">
+                <span>VAT (5%)</span>
+                <span id="qVat">AED 0.00</span>
+            </div>
+            
+            <div class="total-display">
+                <div class="total-row">
+                    <div class="total-label">FINAL TOTAL</div>
+                    <div class="total-value" id="qTotal">AED 0.00</div>
+                </div>
+                <div class="total-savings-box">
+                    <div class="total-savings-label">🎁 Your Savings with Winter Promo</div>
+                    <div class="total-savings-value" id="qTotalSave">AED 0.00</div>
+                </div>
+            </div>
+            
+            <div class="quote-footer">
+                <div>Prices in AED • VAT <span id="qVatText">included</span></div>
+                <div class="quote-footer-brand">De Facto Mobili</div>
+                <div>Dubai, UAE • furniture and decoration</div>
+            </div>
+            
+            <div class="action-box no-print">
+                <div id="confirmSection">
+                    <div class="action-title">📱 Confirm Your Order</div>
+                    <a class="btn btn-confirm" id="confirmBtn" href="#">✅ CONFIRM THIS QUOTE</a>
+                    <div class="btn-help">Tap to send confirmation via WhatsApp</div>
+                </div>
+                
+                <div id="paySection" style="display: none;">
+                    <div class="confirmed-box">
+                        <div class="confirmed-text">✅ Thank you for confirming!</div>
+                    </div>
+                    <a class="btn btn-pay" id="payBtn" href="#" target="_blank">💳 MAKE PAYMENT</a>
+                    <div class="btn-help">Secure payment via Telr • Visa / Mastercard / Apple Pay</div>
+                </div>
+                
+                <button class="btn btn-print" onclick="window.print()">🖨️ Print / Save PDF</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+// Get quote ID from URL
+var params = new URLSearchParams(window.location.search);
+var quoteId = params.get('id');
+
+if (!quoteId) {
+    document.getElementById('loadingState').style.display = 'none';
+    document.getElementById('errorState').style.display = 'block';
+} else {
+    // Fetch quote data
+    fetch('/api/get-quote?id=' + encodeURIComponent(quoteId))
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+            document.getElementById('loadingState').style.display = 'none';
+            
+            if (data.success && data.quote) {
+                showQuote(data.quote);
+            } else {
+                document.getElementById('errorState').style.display = 'block';
+            }
+        })
+        .catch(function(e) {
+            console.error('Error:', e);
+            document.getElementById('loadingState').style.display = 'none';
+            document.getElementById('errorState').style.display = 'block';
+        });
+}
+
+function showQuote(q) {
+    document.getElementById('quoteContent').style.display = 'block';
+    
+    document.getElementById('qRef').textContent = 'Ref: ' + q.ref;
+    document.getElementById('qDate').textContent = q.date + ' • Valid 7 days';
+    document.getElementById('qClientName').textContent = q.clientName || 'Valued Customer';
+    
+    if (q.clientPhone) {
+        document.getElementById('qClientPhone').textContent = '📱 ' + q.clientPhone;
+    } else {
+        document.getElementById('qClientPhone').style.display = 'none';
+    }
+    
+    document.getElementById('qPanelType').textContent = q.panelType;
+    document.getElementById('qArea').textContent = q.area + ' m²';
+    document.getElementById('qPriceM2').textContent = q.priceM2;
+    document.getElementById('qMaterial').textContent = q.material;
+    document.getElementById('qInstallOrig').textContent = q.installOrig;
+    document.getElementById('qInstallSave').textContent = q.installSave;
+    
+    if (q.vat && q.vat !== 'AED 0.00') {
+        document.getElementById('qVat').textContent = q.vat;
+        document.getElementById('qVatText').textContent = 'included';
+    } else {
+        document.getElementById('qVatRow').style.display = 'none';
+        document.getElementById('qVatText').textContent = 'excluded';
+    }
+    
+    document.getElementById('qTotal').textContent = q.total;
+    document.getElementById('qTotalSave').textContent = q.installSave;
+    
+    // Setup confirm button
+    if (q.senderPhone) {
+        var msg = encodeURIComponent('✅ QUOTE CONFIRMED\n\nRef: ' + q.ref + '\nClient: ' + q.clientName + '\nPanel: ' + q.panelType + '\nArea: ' + q.area + ' m²\nTotal: ' + q.total + '\n\nI confirm and want to proceed with the order.');
+        document.getElementById('confirmBtn').href = 'https://wa.me/' + q.senderPhone + '?text=' + msg;
+        
+        document.getElementById('confirmBtn').onclick = function() {
+            setTimeout(function() {
+                document.getElementById('confirmSection').style.display = 'none';
+                document.getElementById('paySection').style.display = 'block';
+            }, 1000);
+        };
+    } else {
+        document.getElementById('confirmSection').style.display = 'none';
+        document.getElementById('paySection').style.display = 'block';
+    }
+    
+    // Setup pay button
+    if (q.paymentUrl) {
+        document.getElementById('payBtn').href = q.paymentUrl;
+        document.getElementById('payBtn').textContent = '💳 MAKE PAYMENT - ' + q.total;
+    } else {
+        document.getElementById('payBtn').style.display = 'none';
+    }
+}
+</script>
+</body>
+</html>
