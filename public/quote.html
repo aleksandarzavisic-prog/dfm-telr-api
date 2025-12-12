@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quote - De Facto Mobili</title>
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@500;600;700&display=swap');
+        
         * { margin: 0; padding: 0; box-sizing: border-box; }
+        
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: #222;
@@ -13,80 +16,271 @@
             min-height: 100vh;
             padding: 20px;
         }
+        
         .container { max-width: 600px; margin: 0 auto; }
         
+        /* Loading & Error States */
         .loading { text-align: center; padding: 50px; }
         .loading-spinner { font-size: 40px; animation: spin 1s linear infinite; display: inline-block; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
-        
         .error-box { background: #c53030; padding: 20px; border-radius: 10px; text-align: center; }
         
-        .quote-header { display: flex; justify-content: space-between; align-items: flex-start; padding-bottom: 20px; border-bottom: 3px solid #BA3521; margin-bottom: 20px; flex-wrap: wrap; gap: 15px; }
-        .company-name { font-size: 28px; font-weight: 700; }
+        /* Quote Header */
+        .quote-header { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: flex-start; 
+            padding-bottom: 20px; 
+            border-bottom: 3px solid #BA3521; 
+            margin-bottom: 20px; 
+            flex-wrap: wrap; 
+            gap: 15px; 
+        }
+        .company-name { 
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 32px; 
+            font-weight: 700; 
+            letter-spacing: 2px;
+        }
         .company-tagline { font-size: 11px; color: #999; letter-spacing: 2px; text-transform: uppercase; }
         .quote-info { text-align: right; }
         .quote-title { font-size: 24px; font-weight: 700; color: #F55139; }
-        .quote-ref { font-size: 13px; color: #F55139; }
+        .quote-ref { font-size: 14px; color: #F55139; font-weight: 600; }
         .quote-date { font-size: 12px; color: #999; }
         
-        .client-box { background: #333; border-left: 4px solid #BA3521; padding: 15px; border-radius: 8px; margin-bottom: 20px; }
-        .client-label { font-size: 10px; color: #999; text-transform: uppercase; margin-bottom: 5px; }
-        .client-name { font-size: 20px; font-weight: 700; }
-        .client-phone { font-size: 13px; color: #999; margin-top: 5px; }
+        /* Client Box */
+        .client-box { 
+            background: #333; 
+            border-left: 4px solid #BA3521; 
+            padding: 15px 20px; 
+            border-radius: 8px; 
+            margin-bottom: 20px; 
+        }
+        .client-label { font-size: 10px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+        .client-name { font-size: 22px; font-weight: 700; }
+        .client-phone { font-size: 14px; color: #999; margin-top: 5px; }
         
-        .promo-bar { background: linear-gradient(135deg, #BA3521, #F55139); padding: 12px; border-radius: 8px; text-align: center; margin-bottom: 20px; font-weight: 700; font-size: 14px; }
+        /* Promo Bar */
+        .promo-bar { 
+            background: linear-gradient(135deg, #BA3521, #F55139); 
+            padding: 15px; 
+            border-radius: 8px; 
+            text-align: center; 
+            margin-bottom: 20px; 
+            font-weight: 700; 
+            font-size: 16px; 
+        }
         
-        .section-title { font-size: 15px; font-weight: 700; color: #F55139; border-bottom: 2px solid #BA3521; padding-bottom: 8px; margin-bottom: 15px; }
+        /* Section Title */
+        .section-title { 
+            font-size: 16px; 
+            font-weight: 700; 
+            color: #F55139; 
+            border-bottom: 2px solid #BA3521; 
+            padding-bottom: 8px; 
+            margin-bottom: 15px; 
+        }
         
-        .detail-row { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px solid #444; font-size: 14px; }
+        /* Detail Rows */
+        .detail-row { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px 0; 
+            border-bottom: 1px solid #444; 
+            font-size: 15px; 
+        }
+        .detail-row span:last-child { font-weight: 600; }
         
-        .material-box { background: #333; border-left: 4px solid #F55139; padding: 15px; border-radius: 8px; margin: 15px 0; text-align: center; }
-        .material-label { font-size: 12px; color: #999; }
-        .material-value { font-size: 26px; font-weight: 700; }
+        /* Material Box */
+        .material-box { 
+            background: #333; 
+            border-left: 4px solid #F55139; 
+            padding: 20px; 
+            border-radius: 8px; 
+            margin: 20px 0; 
+            text-align: center; 
+        }
+        .material-label { font-size: 13px; color: #999; margin-bottom: 5px; }
+        .material-value { font-size: 32px; font-weight: 700; }
         
-        .install-box { background: linear-gradient(135deg, #1a4d3a, #0d3025); border: 3px solid #38a169; border-radius: 10px; padding: 20px; text-align: center; margin: 15px 0; }
-        .install-label { font-size: 13px; color: #68d391; font-weight: 700; margin-bottom: 10px; }
-        .install-row { display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap; }
-        .install-original { font-size: 18px; color: #888; text-decoration: line-through; }
-        .install-free { font-size: 28px; font-weight: 700; color: #68d391; }
-        .install-badge { background: #38a169; color: white; padding: 5px 12px; border-radius: 15px; font-size: 11px; font-weight: 700; }
-        .install-savings { background: rgba(56,161,105,0.3); border-radius: 6px; padding: 10px; margin-top: 12px; }
-        .install-savings-label { font-size: 12px; color: #9ae6b4; }
-        .install-savings-value { font-size: 20px; font-weight: 700; color: #FFF5D0; }
+        /* Installation Box */
+        .install-box { 
+            background: linear-gradient(135deg, #1a4d3a, #0d3025); 
+            border: 3px solid #38a169; 
+            border-radius: 12px; 
+            padding: 25px; 
+            text-align: center; 
+            margin: 20px 0; 
+        }
+        .install-label { font-size: 14px; color: #68d391; font-weight: 700; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 1px; }
+        .install-row { display: flex; justify-content: center; align-items: center; gap: 12px; flex-wrap: wrap; }
+        .install-original { font-size: 20px; color: #888; text-decoration: line-through; }
+        .install-free { font-size: 36px; font-weight: 700; color: #68d391; }
+        .install-badge { background: #38a169; color: white; padding: 6px 14px; border-radius: 20px; font-size: 12px; font-weight: 700; }
+        .install-savings { background: rgba(56,161,105,0.3); border-radius: 8px; padding: 12px; margin-top: 15px; }
+        .install-savings-label { font-size: 13px; color: #9ae6b4; }
+        .install-savings-value { font-size: 24px; font-weight: 700; color: #FFF5D0; margin-top: 5px; }
         
-        .vat-display { display: flex; justify-content: space-between; padding: 10px 0; color: #999; border-bottom: 1px solid #444; font-size: 14px; }
+        /* VAT Row */
+        .vat-display { 
+            display: flex; 
+            justify-content: space-between; 
+            padding: 12px 0; 
+            color: #999; 
+            border-bottom: 1px solid #444; 
+            font-size: 15px; 
+        }
         
-        .total-display { background: linear-gradient(135deg, #BA3521, #F55139); border-radius: 10px; padding: 20px; margin: 15px 0; }
+        /* Total Box */
+        .total-display { 
+            background: linear-gradient(135deg, #BA3521, #F55139); 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin: 20px 0; 
+        }
         .total-row { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; }
-        .total-label { font-size: 14px; }
-        .total-value { font-size: 32px; font-weight: 700; }
-        .total-savings-box { background: rgba(255,255,255,0.15); border-radius: 6px; padding: 12px; margin-top: 12px; text-align: center; }
-        .total-savings-label { font-size: 12px; opacity: 0.9; }
-        .total-savings-value { font-size: 20px; font-weight: 700; color: #90EE90; }
+        .total-label { font-size: 16px; }
+        .total-value { font-size: 38px; font-weight: 700; }
+        .total-savings-box { background: rgba(255,255,255,0.15); border-radius: 8px; padding: 15px; margin-top: 15px; text-align: center; }
+        .total-savings-label { font-size: 13px; opacity: 0.9; }
+        .total-savings-value { font-size: 24px; font-weight: 700; color: #90EE90; margin-top: 5px; }
         
-        .quote-footer { border-top: 3px solid #BA3521; padding-top: 15px; margin-top: 20px; text-align: center; color: #999; font-size: 11px; }
-        .quote-footer-brand { font-size: 14px; font-weight: 700; color: #FFF5D0; margin: 5px 0; }
+        /* Footer */
+        .quote-footer { 
+            border-top: 3px solid #BA3521; 
+            padding-top: 20px; 
+            margin-top: 25px; 
+            text-align: center; 
+            color: #999; 
+            font-size: 12px; 
+            line-height: 1.8;
+        }
+        .quote-footer-brand { 
+            font-family: 'Barlow Condensed', sans-serif;
+            font-size: 18px; 
+            font-weight: 700; 
+            color: #FFF5D0; 
+            letter-spacing: 1px;
+        }
         
-        .action-box { background: #333; border-radius: 12px; padding: 20px; margin-top: 25px; text-align: center; }
+        /* Action Buttons */
+        .action-box { 
+            background: #333; 
+            border-radius: 12px; 
+            padding: 25px; 
+            margin-top: 30px; 
+            text-align: center; 
+        }
         .action-title { font-size: 12px; color: #999; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 15px; }
-        .btn { display: block; width: 100%; padding: 18px; border-radius: 10px; font-size: 18px; font-weight: 700; text-decoration: none; text-align: center; border: none; cursor: pointer; margin-bottom: 10px; }
+        .btn { 
+            display: block; 
+            width: 100%; 
+            padding: 18px; 
+            border-radius: 10px; 
+            font-size: 18px; 
+            font-weight: 700; 
+            text-decoration: none; 
+            text-align: center; 
+            border: none; 
+            cursor: pointer; 
+            margin-bottom: 10px; 
+        }
         .btn-confirm { background: linear-gradient(135deg, #25D366, #128C7E); color: white; }
         .btn-pay { background: linear-gradient(135deg, #d69e2e, #b7791f); color: white; }
-        .btn-print { background: linear-gradient(135deg, #666, #444); color: #FFF5D0; font-size: 14px; padding: 12px; }
-        .btn-help { font-size: 11px; color: #999; margin-top: 5px; margin-bottom: 15px; }
+        .btn-print { background: #555; color: #FFF5D0; font-size: 14px; padding: 14px; margin-top: 15px; }
+        .btn-help { font-size: 11px; color: #999; margin-top: 8px; }
         
-        .confirmed-box { background: #1a4d3a; border: 2px solid #38a169; border-radius: 10px; padding: 15px; margin-bottom: 15px; text-align: center; }
+        .confirmed-box { 
+            background: #1a4d3a; 
+            border: 2px solid #38a169; 
+            border-radius: 10px; 
+            padding: 15px; 
+            margin-bottom: 15px; 
+            text-align: center; 
+        }
         .confirmed-text { color: #68d391; font-size: 16px; font-weight: 600; }
         
+        /* Print Styles - Match Web View */
         @media print {
-            .no-print { display: none !important; }
-            body { background: #222 !important; -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+            @page { 
+                size: A4; 
+                margin: 15mm; 
+            }
+            
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            body { 
+                background: #222 !important; 
+                padding: 0 !important;
+                font-size: 12pt;
+            }
+            
+            .container {
+                max-width: 100%;
+            }
+            
+            .no-print { 
+                display: none !important; 
+            }
+            
+            .quote-header {
+                border-bottom: 3px solid #BA3521 !important;
+            }
+            
+            .client-box {
+                background: #333 !important;
+                border-left: 4px solid #BA3521 !important;
+            }
+            
+            .promo-bar {
+                background: linear-gradient(135deg, #BA3521, #F55139) !important;
+            }
+            
+            .section-title {
+                color: #F55139 !important;
+                border-bottom: 2px solid #BA3521 !important;
+            }
+            
+            .material-box {
+                background: #333 !important;
+                border-left: 4px solid #F55139 !important;
+            }
+            
+            .install-box {
+                background: linear-gradient(135deg, #1a4d3a, #0d3025) !important;
+                border: 3px solid #38a169 !important;
+            }
+            
+            .install-badge {
+                background: #38a169 !important;
+            }
+            
+            .install-savings {
+                background: rgba(56,161,105,0.3) !important;
+            }
+            
+            .total-display {
+                background: linear-gradient(135deg, #BA3521, #F55139) !important;
+            }
+            
+            .total-savings-box {
+                background: rgba(255,255,255,0.15) !important;
+            }
+            
+            .quote-footer {
+                border-top: 3px solid #BA3521 !important;
+            }
         }
         
         @media (max-width: 500px) {
             .quote-header { flex-direction: column; }
             .quote-info { text-align: left; }
-            .total-value { font-size: 26px; }
+            .total-value { font-size: 28px; }
+            .material-value { font-size: 26px; }
         }
     </style>
 </head>
@@ -125,7 +319,7 @@
                 <div class="client-phone" id="qClientPhone">📱 0000000000</div>
             </div>
             
-            <div class="promo-bar">❄️ WINTER HOLIDAY - FREE INSTALLATION! 🎁</div>
+            <div class="promo-bar">❄️ WINTER HOLIDAY PROMOTION - FREE INSTALLATION! 🎁</div>
             
             <div class="section-title">Wall Deco Panel Details</div>
             <div class="detail-row"><span>Panel Type</span><span id="qPanelType">Bas Relief</span></div>
@@ -138,7 +332,7 @@
             </div>
             
             <div class="install-box">
-                <div class="install-label">🎉 INSTALLATION</div>
+                <div class="install-label">🎉 Installation</div>
                 <div class="install-row">
                     <span class="install-original" id="qInstallOrig">AED 5,950.00</span>
                     <span class="install-free">FREE</span>
@@ -193,6 +387,9 @@
     </div>
 
 <script>
+// Store quote data globally
+var quoteData = null;
+
 // Get quote ID from URL
 var params = new URLSearchParams(window.location.search);
 var quoteId = params.get('id');
@@ -208,6 +405,7 @@ if (!quoteId) {
             document.getElementById('loadingState').style.display = 'none';
             
             if (data.success && data.quote) {
+                quoteData = data.quote;
                 showQuote(data.quote);
             } else {
                 document.getElementById('errorState').style.display = 'block';
@@ -251,28 +449,41 @@ function showQuote(q) {
     document.getElementById('qTotal').textContent = q.total;
     document.getElementById('qTotalSave').textContent = q.installSave;
     
+    // Setup pay button with amount - ALWAYS show it
+    var payBtn = document.getElementById('payBtn');
+    payBtn.textContent = '💳 MAKE PAYMENT - ' + q.total;
+    
+    if (q.paymentUrl) {
+        payBtn.href = q.paymentUrl;
+    }
+    
+    // Check if already confirmed (using localStorage)
+    var isConfirmed = false;
+    try {
+        isConfirmed = localStorage.getItem('confirmed_' + q.ref) === 'true';
+    } catch(e) {}
+    
     // Setup confirm button
-    if (q.senderPhone) {
-        var msg = encodeURIComponent('✅ QUOTE CONFIRMED\n\nRef: ' + q.ref + '\nClient: ' + q.clientName + '\nPanel: ' + q.panelType + '\nArea: ' + q.area + ' m²\nTotal: ' + q.total + '\n\nI confirm and want to proceed with the order.');
+    if (q.senderPhone && !isConfirmed) {
+        var msg = encodeURIComponent('✅ QUOTE CONFIRMED\n\nRef: ' + q.ref + '\nClient: ' + (q.clientName || 'Customer') + '\nPanel: ' + q.panelType + '\nArea: ' + q.area + ' m²\nTotal: ' + q.total + '\n\nI confirm and want to proceed with the order.');
         document.getElementById('confirmBtn').href = 'https://wa.me/' + q.senderPhone + '?text=' + msg;
         
         document.getElementById('confirmBtn').onclick = function() {
+            // Store confirmation in localStorage
+            try {
+                localStorage.setItem('confirmed_' + q.ref, 'true');
+            } catch(e) {}
+            
+            // Show pay section after a short delay
             setTimeout(function() {
                 document.getElementById('confirmSection').style.display = 'none';
                 document.getElementById('paySection').style.display = 'block';
-            }, 1000);
+            }, 500);
         };
     } else {
+        // Already confirmed or no sender phone - show pay section directly
         document.getElementById('confirmSection').style.display = 'none';
         document.getElementById('paySection').style.display = 'block';
-    }
-    
-    // Setup pay button
-    if (q.paymentUrl) {
-        document.getElementById('payBtn').href = q.paymentUrl;
-        document.getElementById('payBtn').textContent = '💳 MAKE PAYMENT - ' + q.total;
-    } else {
-        document.getElementById('payBtn').style.display = 'none';
     }
 }
 </script>
